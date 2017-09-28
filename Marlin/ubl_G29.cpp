@@ -381,6 +381,7 @@
     }
 
     if (parser.seen('J')) {
+    #if HAS_BED_PROBE
       if (g29_grid_size) {  // if not 0 it is a normal n x n grid being probed
         save_ubl_active_state_and_disable();
         tilt_mesh_based_on_probed_grid(parser.seen('T'));
@@ -413,6 +414,9 @@
         tilt_mesh_based_on_3pts(z1, z2, z3);
         restore_ubl_active_state_and_leave();
       }
+    #else
+      SERIAL_ECHO("UBL function not available due to missing Z-Probe.\n");
+    #endif // HAS_BED_PROBE
     }
 
     if (parser.seen('P')) {
@@ -780,6 +784,7 @@
    * This attempts to fill in locations closest to the nozzle's start location first.
    */
   void unified_bed_leveling::probe_entire_mesh(const float &lx, const float &ly, const bool do_ubl_mesh_map, const bool stow_probe, bool close_or_far) {
+  #if HAS_BED_PROBE
     mesh_index_pair location;
 
     has_control_of_lcd_panel = true;
@@ -823,6 +828,9 @@
       constrain(lx - (X_PROBE_OFFSET_FROM_EXTRUDER), UBL_MESH_MIN_X, UBL_MESH_MAX_X),
       constrain(ly - (Y_PROBE_OFFSET_FROM_EXTRUDER), UBL_MESH_MIN_Y, UBL_MESH_MAX_Y)
     );
+  #else
+    SERIAL_ECHO("UBL function not available due to missing Z-Probe.\n");
+  #endif // HAS_BED_PROBE
   }
 
   void unified_bed_leveling::tilt_mesh_based_on_3pts(const float &z1, const float &z2, const float &z3) {
@@ -1623,6 +1631,7 @@
     }
   }
 
+  #if HAS_BED_PROBE
   void unified_bed_leveling::tilt_mesh_based_on_probed_grid(const bool do_ubl_mesh_map) {
     constexpr int16_t x_min = max(MIN_PROBE_X, UBL_MESH_MIN_X),
                       x_max = min(MAX_PROBE_X, UBL_MESH_MAX_X),
@@ -1767,6 +1776,7 @@
 
     if (do_ubl_mesh_map) display_map(g29_map_type);
   }
+  #endif // HAS_BED_PROBE
 
   #if ENABLED(UBL_G29_P31)
     void unified_bed_leveling::smart_fill_wlsf(const float &weight_factor) {
