@@ -51,7 +51,13 @@
 
   extern float meshedit_done;
   extern long babysteps_done;
+#if HAS_BED_PROBE
   extern float probe_pt(const float &lx, const float &ly, const bool, const uint8_t, const bool=true);
+#else
+  inline float probe_pt(const float &lx, const float &ly, const bool, const uint8_t, const bool=true) {
+    return NAN;
+  }
+#endif
   extern bool set_probe_deployed(bool);
   extern void set_bed_leveling_enabled(bool);
   typedef void (*screenFunc_t)();
