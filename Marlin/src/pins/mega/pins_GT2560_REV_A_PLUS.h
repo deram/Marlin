@@ -32,3 +32,19 @@
 #if DISABLED(BLTOUCH)
   #define SERVO0_PIN  32
 #endif
+
+
+// CUSTOM:
+#undef E1_STEP_PIN
+#undef E1_DIR_PIN
+#undef E1_ENABLE_PIN
+
+#define  X_SERIAL_TX_PIN  49
+#define  Y_SERIAL_TX_PIN  49
+#define  Z_SERIAL_TX_PIN  49
+#define  E0_SERIAL_TX_PIN 49
+
+#define  X_SERIAL_RX_PIN  11
+#define  Y_SERIAL_RX_PIN  11
+#define  Z_SERIAL_RX_PIN  11
+#define  E0_SERIAL_RX_PIN 11
